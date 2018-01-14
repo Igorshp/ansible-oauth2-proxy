@@ -39,16 +39,14 @@
     owner="{{ oauth2_user }}"
     mode="0755"
     state="link"
-  notify: 
-    - oauth2-proxy restart
+  notify: restart {{oauth2_service_name}}
 
 - name: Deploy init.d script
   template: 
     src="init.d.sh.j2.sh"
-    dest="/etc/init.d/oauth2-proxy"
+    dest="/etc/init.d/{{oauth2_service_name}}"
     mode="0755"
-  notify: 
-    - oauth2-proxy restart
+  notify: restart {{oauth2_service_name}}
 
 - name: Deploy Config
   template: 
@@ -56,11 +54,10 @@
     dest="{{ oauth2_config_path }}"
     owner="{{ oauth2_user }}"
     mode="0600"
-  notify: 
-    - oauth2-proxy restart
+  notify: restart {{oauth2_service_name}}
 
 - name: Service start
   service:
-    name="oauth2-proxy"
+    name="{{oauth2_service_name}}"
     state="started"
     enabled="True"
